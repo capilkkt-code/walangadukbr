@@ -1,0 +1,1836 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walangaduk - Layanan Administrasi Kependudukan Digital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .mobile-nav {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-nav.active {
+            transform: translateX(0);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .file-upload-area {
+            border: 2px dashed #cbd5e0;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload-area.dragover {
+            border-color: #667eea;
+            background-color: #f7fafc;
+        }
+        
+        /* Mobile App Styles */
+        @media (max-width: 768px) {
+            body {
+                background: #f8fafc;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            }
+            
+            .mobile-app-style {
+                padding-top: 70px;
+                padding-bottom: 80px;
+                min-height: 100vh;
+            }
+            
+            /* Mobile App Header */
+            .mobile-header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 0 0 25px 25px;
+                box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+            }
+            
+            /* Mobile Cards */
+            .mobile-card {
+                background: white;
+                border-radius: 20px;
+                padding: 20px;
+                margin: 15px;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+                border: none;
+            }
+            
+            /* Mobile Grid */
+            .mobile-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+                padding: 0 15px;
+            }
+            
+            .mobile-service-card {
+                background: white;
+                border-radius: 15px;
+                padding: 20px 15px;
+                text-align: center;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+                transition: all 0.3s ease;
+                border: 1px solid #f1f5f9;
+            }
+            
+            .mobile-service-card:active {
+                transform: scale(0.95);
+                box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            }
+            
+            /* Mobile Bottom Navigation */
+            .mobile-bottom-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: white;
+                border-top: 1px solid #e2e8f0;
+                padding: 10px 0 25px 0;
+                z-index: 1000;
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            }
+            
+            .mobile-nav-item {
+                flex: 1;
+                text-align: center;
+                padding: 8px 4px;
+                color: #64748b;
+                text-decoration: none;
+                transition: all 0.2s ease;
+                border-radius: 12px;
+                margin: 0 8px;
+            }
+            
+            .mobile-nav-item.active {
+                color: #667eea;
+                background: #f1f5f9;
+            }
+            
+            .mobile-nav-item i {
+                display: block;
+                font-size: 20px;
+                margin-bottom: 4px;
+            }
+            
+            .mobile-nav-item span {
+                font-size: 11px;
+                font-weight: 500;
+            }
+            
+            /* Mobile Form Styles */
+            .mobile-form-section {
+                background: white;
+                border-radius: 20px;
+                padding: 25px 20px;
+                margin: 15px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            }
+            
+            .mobile-form-section h3 {
+                font-size: 18px;
+                margin-bottom: 20px;
+                color: #1e293b;
+                display: flex;
+                align-items: center;
+            }
+            
+            .mobile-form-section h3 i {
+                margin-right: 10px;
+                font-size: 20px;
+            }
+            
+            .mobile-input {
+                width: 100%;
+                padding: 15px;
+                border: 2px solid #f1f5f9;
+                border-radius: 12px;
+                font-size: 16px;
+                background: #fafbfc;
+                transition: all 0.3s ease;
+            }
+            
+            .mobile-input:focus {
+                border-color: #667eea;
+                background: white;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            }
+            
+            .mobile-button {
+                width: 100%;
+                padding: 18px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                border-radius: 15px;
+                font-size: 16px;
+                font-weight: 600;
+                box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+                transition: all 0.3s ease;
+            }
+            
+            .mobile-button:active {
+                transform: translateY(2px);
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            }
+            
+            /* Mobile Stats */
+            .mobile-stats {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px;
+                padding: 0 15px;
+                margin: 20px 0;
+            }
+            
+            .mobile-stat-card {
+                background: white;
+                border-radius: 15px;
+                padding: 20px 15px;
+                text-align: center;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            }
+            
+            .mobile-stat-number {
+                font-size: 24px;
+                font-weight: 700;
+                margin-bottom: 5px;
+            }
+            
+            .mobile-stat-label {
+                font-size: 12px;
+                color: #64748b;
+                font-weight: 500;
+            }
+            
+            /* Hide desktop navigation on mobile */
+            .desktop-nav {
+                display: none !important;
+            }
+            
+            /* Mobile Hero Section */
+            .mobile-hero {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 30px 20px;
+                text-align: center;
+                border-radius: 0 0 30px 30px;
+                margin-bottom: 20px;
+            }
+            
+            .mobile-hero h1 {
+                font-size: 28px;
+                font-weight: 700;
+                margin-bottom: 10px;
+            }
+            
+            .mobile-hero p {
+                font-size: 16px;
+                opacity: 0.9;
+                margin-bottom: 25px;
+            }
+            
+            /* Mobile Contact Cards */
+            .mobile-contact-card {
+                background: white;
+                border-radius: 15px;
+                padding: 20px;
+                margin: 15px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+                display: flex;
+                align-items: center;
+            }
+            
+            .mobile-contact-icon {
+                width: 50px;
+                height: 50px;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 15px;
+                font-size: 20px;
+            }
+            
+            /* Mobile About Cards */
+            .mobile-about-card {
+                background: white;
+                border-radius: 20px;
+                padding: 25px 20px;
+                margin: 15px;
+                text-align: center;
+                box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            }
+            
+            .mobile-about-card i {
+                font-size: 40px;
+                margin-bottom: 15px;
+            }
+            
+            /* Mobile File Upload */
+            .mobile-file-upload {
+                background: #f8fafc;
+                border: 2px dashed #cbd5e0;
+                border-radius: 15px;
+                padding: 30px 20px;
+                text-align: center;
+                margin: 15px 0;
+            }
+            
+            .mobile-file-upload i {
+                font-size: 40px;
+                color: #94a3b8;
+                margin-bottom: 15px;
+            }
+            
+            /* Floating Action Button */
+            .mobile-fab {
+                position: fixed;
+                bottom: 100px;
+                right: 20px;
+                width: 60px;
+                height: 60px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 24px;
+                box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+                z-index: 999;
+                transition: all 0.3s ease;
+            }
+            
+            .mobile-fab:active {
+                transform: scale(0.9);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-id-card text-2xl text-indigo-600 mr-2"></i>
+                        <span class="text-xl font-bold text-gray-800">Walangaduk</span>
+                    </div>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="desktop-nav hidden md:flex items-center space-x-8">
+                    <a href="#" onclick="showPage('dashboard')" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Dashboard</a>
+                    <a href="#" onclick="showPage('registrasi')" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Registrasi</a>
+                    <a href="#" onclick="showPage('tentang')" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Tentang Kami</a>
+                    <a href="#" onclick="showPage('kontak')" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Kontak</a>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="toggleMobileMenu()" class="text-gray-700 hover:text-indigo-600 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <div id="mobileMenu" class="mobile-nav md:hidden fixed inset-y-0 left-0 w-64 bg-white shadow-lg z-50">
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-8">
+                    <div class="flex items-center">
+                        <i class="fas fa-id-card text-2xl text-indigo-600 mr-2"></i>
+                        <span class="text-xl font-bold text-gray-800">Walangaduk</span>
+                    </div>
+                    <button onclick="toggleMobileMenu()" class="text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <nav class="space-y-4">
+                    <a href="#" onclick="showPage('dashboard'); toggleMobileMenu()" class="block text-gray-700 hover:text-indigo-600 py-2 px-4 rounded-md transition-colors">
+                        <i class="fas fa-tachometer-alt mr-3"></i>Dashboard
+                    </a>
+                    <a href="#" onclick="showPage('registrasi'); toggleMobileMenu()" class="block text-gray-700 hover:text-indigo-600 py-2 px-4 rounded-md transition-colors">
+                        <i class="fas fa-file-alt mr-3"></i>Registrasi
+                    </a>
+                    <a href="#" onclick="showPage('tentang'); toggleMobileMenu()" class="block text-gray-700 hover:text-indigo-600 py-2 px-4 rounded-md transition-colors">
+                        <i class="fas fa-info-circle mr-3"></i>Tentang Kami
+                    </a>
+                    <a href="#" onclick="showPage('kontak'); toggleMobileMenu()" class="block text-gray-700 hover:text-indigo-600 py-2 px-4 rounded-md transition-colors">
+                        <i class="fas fa-phone mr-3"></i>Kontak
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="mobile-bottom-nav md:hidden">
+        <div class="flex">
+            <a href="#" onclick="showPage('dashboard')" class="mobile-nav-item" id="nav-dashboard">
+                <i class="fas fa-home"></i>
+                <span>Beranda</span>
+            </a>
+            <a href="#" onclick="showPage('registrasi')" class="mobile-nav-item" id="nav-registrasi">
+                <i class="fas fa-file-alt"></i>
+                <span>Daftar</span>
+            </a>
+            <a href="#" onclick="showPage('tentang')" class="mobile-nav-item" id="nav-tentang">
+                <i class="fas fa-info-circle"></i>
+                <span>Tentang</span>
+            </a>
+            <a href="#" onclick="showPage('kontak')" class="mobile-nav-item" id="nav-kontak">
+                <i class="fas fa-phone"></i>
+                <span>Kontak</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="mobile-fab md:hidden" onclick="showPage('registrasi')">
+        <i class="fas fa-plus"></i>
+    </div>
+
+    <!-- Main Content -->
+    <main class="mobile-app-style">
+        <!-- Dashboard Page -->
+        <div id="dashboardPage" class="page-content">
+            <!-- Mobile Hero Section -->
+            <section class="mobile-hero md:hidden">
+                <h1>Walangaduk</h1>
+                <p>Revolusi Digital Administrasi Kependudukan untuk Kepulauan Tanimbar</p>
+                <button onclick="showPage('registrasi')" class="mobile-button">
+                    <i class="fas fa-plus mr-2"></i>
+                    Mulai Pengajuan
+                </button>
+            </section>
+
+            <!-- Desktop Hero Section -->
+            <section class="gradient-bg text-white py-20 hidden md:block">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6 fade-in">Walangaduk</h1>
+                    <p class="text-xl md:text-2xl mb-8 fade-in">Revolusi Digital Administrasi Kependudukan</p>
+                    <p class="text-lg mb-8 max-w-3xl mx-auto fade-in">Wujudkan impian pelayanan publik yang cepat, mudah, dan terpercaya. Walangaduk hadir sebagai solusi inovatif untuk menghadirkan layanan administrasi kependudukan yang modern dan efisien di era digital, khusus untuk masyarakat Kepulauan Tanimbar.</p>
+                    <button onclick="showPage('registrasi')" class="bg-white text-indigo-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors pulse-animation">
+                        Mulai Pengajuan
+                    </button>
+                </div>
+            </section>
+
+            <!-- Mobile Statistics -->
+            <div class="mobile-stats md:hidden">
+                <div class="mobile-stat-card">
+                    <div class="mobile-stat-number text-indigo-600" id="counter1-mobile">0</div>
+                    <div class="mobile-stat-label">Dokumen Diproses</div>
+                </div>
+                <div class="mobile-stat-card">
+                    <div class="mobile-stat-number text-emerald-600" id="counter2-mobile">0</div>
+                    <div class="mobile-stat-label">Petugas Terdaftar</div>
+                </div>
+                <div class="mobile-stat-card">
+                    <div class="mobile-stat-number text-violet-600" id="counter3-mobile">0</div>
+                    <div class="mobile-stat-label">Kecamatan Dilayani</div>
+                </div>
+            </div>
+
+            <!-- Mobile Services Grid -->
+            <div class="mobile-grid md:hidden">
+                <div class="mobile-service-card" onclick="showPage('registrasi')">
+                    <i class="fas fa-users text-3xl text-indigo-600 mb-3"></i>
+                    <h3 class="font-semibold text-gray-800 text-sm mb-1">Kartu Keluarga</h3>
+                    <p class="text-xs text-gray-600">Dokumen identitas keluarga</p>
+                </div>
+                <div class="mobile-service-card" onclick="showPage('registrasi')">
+                    <i class="fas fa-id-card text-3xl text-emerald-600 mb-3"></i>
+                    <h3 class="font-semibold text-gray-800 text-sm mb-1">KTP Elektronik</h3>
+                    <p class="text-xs text-gray-600">Kartu Tanda Penduduk elektronik</p>
+                </div>
+                <div class="mobile-service-card" onclick="showPage('registrasi')">
+                    <i class="fas fa-child text-3xl text-violet-600 mb-3"></i>
+                    <h3 class="font-semibold text-gray-800 text-sm mb-1">Kartu Identitas Anak</h3>
+                    <p class="text-xs text-gray-600">Identitas untuk anak-anak</p>
+                </div>
+                <div class="mobile-service-card" onclick="showPage('registrasi')">
+                    <i class="fas fa-passport text-3xl text-amber-600 mb-3"></i>
+                    <h3 class="font-semibold text-gray-800 text-sm mb-1">SKPWNI</h3>
+                    <p class="text-xs text-gray-600">Surat Keterangan Pindah WNI</p>
+                </div>
+                <div class="mobile-service-card" onclick="showPage('registrasi')">
+                    <i class="fas fa-file-contract text-3xl text-rose-600 mb-3"></i>
+                    <h3 class="font-semibold text-gray-800 text-sm mb-1">SKDWNI</h3>
+                    <p class="text-xs text-gray-600">Surat Keterangan Datang WNI</p>
+                </div>
+                <div class="mobile-service-card" onclick="showPage('registrasi')">
+                    <i class="fas fa-baby text-3xl text-cyan-600 mb-3"></i>
+                    <h3 class="font-semibold text-gray-800 text-sm mb-1">Akta Kelahiran</h3>
+                    <p class="text-xs text-gray-600">Dokumen kelahiran resmi</p>
+                </div>
+                <div class="mobile-service-card" onclick="showPage('registrasi')">
+                    <i class="fas fa-cross text-3xl text-slate-600 mb-3"></i>
+                    <h3 class="font-semibold text-gray-800 text-sm mb-1">Akta Kematian</h3>
+                    <p class="text-xs text-gray-600">Dokumen kematian resmi</p>
+                </div>
+                <div class="mobile-service-card" onclick="showPage('registrasi')">
+                    <i class="fas fa-plus text-3xl text-fuchsia-600 mb-3"></i>
+                    <h3 class="font-semibold text-gray-800 text-sm mb-1">Lainnya</h3>
+                    <p class="text-xs text-gray-600">Dokumen kependudukan lain</p>
+                </div>
+            </div>
+
+            <!-- Inspiring Message Section -->
+            <section class="py-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white hidden md:block">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h2 class="text-3xl font-bold mb-6">Mengapa Memilih Walangaduk?</h2>
+                    <p class="text-xl mb-12 max-w-4xl mx-auto opacity-90">
+                        Di tengah pesatnya perkembangan teknologi, kami percaya bahwa setiap warga negara berhak mendapatkan pelayanan administrasi yang berkualitas. Walangaduk hadir untuk menjembatani kesenjangan digital dan memberikan akses yang setara bagi seluruh masyarakat Kepulauan Tanimbar.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm">
+                            <i class="fas fa-lightning-bolt text-4xl mb-4 text-yellow-300"></i>
+                            <h3 class="text-xl font-bold mb-3">Proses Super Cepat</h3>
+                            <p class="opacity-90">Dokumen Anda diproses dalam hitungan hari, bukan minggu</p>
+                        </div>
+                        <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm">
+                            <i class="fas fa-heart text-4xl mb-4 text-red-300"></i>
+                            <h3 class="text-xl font-bold mb-3">Pelayanan Ramah</h3>
+                            <p class="opacity-90">Tim kami siap membantu dengan sepenuh hati</p>
+                        </div>
+                        <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm">
+                            <i class="fas fa-shield-check text-4xl mb-4 text-green-300"></i>
+                            <h3 class="text-xl font-bold mb-3">100% Aman</h3>
+                            <p class="opacity-90">Data Anda dilindungi dengan teknologi enkripsi terdepan</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Desktop Services Section -->
+            <section class="py-16 bg-white hidden md:block">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Jenis Dokumen yang Dilayani</h2>
+                    <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+                        Dari KTP hingga Akta Kelahiran, kami melayani berbagai kebutuhan dokumen kependudukan Anda dengan standar pelayanan terbaik
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="card-hover bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-xl text-center">
+                            <i class="fas fa-users text-4xl text-indigo-600 mb-4"></i>
+                            <h3 class="font-semibold text-gray-800 mb-2">Kartu Keluarga</h3>
+                            <p class="text-sm text-gray-600">Dokumen identitas keluarga</p>
+                        </div>
+                        <div class="card-hover bg-gradient-to-br from-green-50 to-emerald-100 p-6 rounded-xl text-center">
+                            <i class="fas fa-id-card text-4xl text-emerald-600 mb-4"></i>
+                            <h3 class="font-semibold text-gray-800 mb-2">KTP Elektronik</h3>
+                            <p class="text-sm text-gray-600">Kartu Tanda Penduduk elektronik</p>
+                        </div>
+                        <div class="card-hover bg-gradient-to-br from-purple-50 to-violet-100 p-6 rounded-xl text-center">
+                            <i class="fas fa-child text-4xl text-violet-600 mb-4"></i>
+                            <h3 class="font-semibold text-gray-800 mb-2">Kartu Identitas Anak</h3>
+                            <p class="text-sm text-gray-600">Identitas untuk anak-anak</p>
+                        </div>
+                        <div class="card-hover bg-gradient-to-br from-orange-50 to-amber-100 p-6 rounded-xl text-center">
+                            <i class="fas fa-passport text-4xl text-amber-600 mb-4"></i>
+                            <h3 class="font-semibold text-gray-800 mb-2">SKPWNI</h3>
+                            <p class="text-sm text-gray-600">Surat Keterangan Pindah WNI</p>
+                        </div>
+                        <div class="card-hover bg-gradient-to-br from-red-50 to-rose-100 p-6 rounded-xl text-center">
+                            <i class="fas fa-file-contract text-4xl text-rose-600 mb-4"></i>
+                            <h3 class="font-semibold text-gray-800 mb-2">SKDWNI</h3>
+                            <p class="text-sm text-gray-600">Surat Keterangan Datang WNI</p>
+                        </div>
+                        <div class="card-hover bg-gradient-to-br from-teal-50 to-cyan-100 p-6 rounded-xl text-center">
+                            <i class="fas fa-baby text-4xl text-cyan-600 mb-4"></i>
+                            <h3 class="font-semibold text-gray-800 mb-2">Akta Kelahiran</h3>
+                            <p class="text-sm text-gray-600">Dokumen kelahiran resmi</p>
+                        </div>
+                        <div class="card-hover bg-gradient-to-br from-gray-50 to-slate-100 p-6 rounded-xl text-center">
+                            <i class="fas fa-cross text-4xl text-slate-600 mb-4"></i>
+                            <h3 class="font-semibold text-gray-800 mb-2">Akta Kematian</h3>
+                            <p class="text-sm text-gray-600">Dokumen kematian resmi</p>
+                        </div>
+                        <div class="card-hover bg-gradient-to-br from-pink-50 to-fuchsia-100 p-6 rounded-xl text-center">
+                            <i class="fas fa-plus text-4xl text-fuchsia-600 mb-4"></i>
+                            <h3 class="font-semibold text-gray-800 mb-2">Lainnya</h3>
+                            <p class="text-sm text-gray-600">Dokumen kependudukan lain</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Desktop Statistics Section -->
+            <section class="py-16 bg-gray-100 hidden md:block">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-4">Pencapaian Kami</h2>
+                        <p class="text-gray-600 max-w-2xl mx-auto">
+                            Angka-angka ini bukan sekadar statistik, tetapi cerminan kepercayaan dan kepuasan masyarakat terhadap layanan kami
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                        <div class="bg-white p-8 rounded-xl shadow-lg">
+                            <div class="text-4xl font-bold text-indigo-600 mb-2" id="counter1">0</div>
+                            <p class="text-gray-600 font-semibold">Dokumen Diproses</p>
+                            <p class="text-sm text-gray-500 mt-2">Dengan tingkat akurasi 99.8%</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-xl shadow-lg">
+                            <div class="text-4xl font-bold text-emerald-600 mb-2" id="counter2">0</div>
+                            <p class="text-gray-600 font-semibold">Petugas Terdaftar</p>
+                            <p class="text-sm text-gray-500 mt-2">Siap melayani 24/7</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-xl shadow-lg">
+                            <div class="text-4xl font-bold text-violet-600 mb-2" id="counter3">0</div>
+                            <p class="text-gray-600 font-semibold">Kecamatan Dilayani</p>
+                            <p class="text-sm text-gray-500 mt-2">Di seluruh Kepulauan Tanimbar</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonial Section -->
+            <section class="py-16 bg-gradient-to-r from-green-50 to-blue-50 hidden md:block">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-4">Apa Kata Mereka?</h2>
+                        <p class="text-gray-600 max-w-2xl mx-auto">
+                            Kepuasan dan senyuman masyarakat adalah motivasi terbesar kami untuk terus berinovasi
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="bg-white p-6 rounded-xl shadow-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-user text-indigo-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Bapak Yosef</h4>
+                                    <p class="text-sm text-gray-600">Petugas Desa Saumlaki</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 italic">
+                                "Walangaduk benar-benar mengubah cara kerja kami. Yang dulu butuh berminggu-minggu, sekarang hanya hitungan hari. Luar biasa!"
+                            </p>
+                            <div class="flex text-yellow-400 mt-3">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-user text-green-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Ibu Maria</h4>
+                                    <p class="text-sm text-gray-600">Petugas Desa Wowonda</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 italic">
+                                "Interface yang mudah dipahami, proses yang transparan. Masyarakat jadi lebih percaya dengan pelayanan kami."
+                            </p>
+                            <div class="flex text-yellow-400 mt-3">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-user text-purple-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Bapak Andreas</h4>
+                                    <p class="text-sm text-gray-600">Petugas Desa Adaut</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 italic">
+                                "Tim support yang responsif, fitur yang lengkap. Walangaduk adalah solusi terbaik untuk administrasi modern."
+                            </p>
+                            <div class="flex text-yellow-400 mt-3">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Registration Page -->
+        <div id="registrasiPage" class="page-content hidden">
+            <!-- Mobile Header -->
+            <div class="mobile-header md:hidden">
+                <div class="flex items-center justify-between">
+                    <button onclick="showPage('dashboard')" class="text-white">
+                        <i class="fas fa-arrow-left text-xl"></i>
+                    </button>
+                    <h2 class="text-lg font-semibold">Formulir Pengajuan</h2>
+                    <div class="w-6"></div>
+                </div>
+            </div>
+
+            <!-- Desktop Header -->
+            <section class="py-8 bg-gradient-to-br from-indigo-50 to-purple-50 min-h-screen hidden md:block">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="bg-white rounded-2xl shadow-xl p-8">
+                        <div class="text-center mb-8">
+                            <h1 class="text-3xl font-bold text-gray-800 mb-2">Formulir Pengajuan Dokumen</h1>
+                            <p class="text-gray-600">Silakan lengkapi formulir berikut untuk mengajukan dokumen kependudukan</p>
+                        </div>
+
+                        <form id="registrationForm" class="space-y-6">
+                            <!-- Desktop Form Content (same as before) -->
+                            <!-- Informasi Petugas -->
+                            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                    <i class="fas fa-user-tie mr-2 text-indigo-600"></i>
+                                    Informasi Petugas
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Pengajuan</label>
+                                        <input type="date" id="tanggalPengajuan" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Pelaporan</label>
+                                        <select id="jenispelaporan" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                                            <option value="">Pilih Jenis Dokumen</option>
+                                            <option value="Kartu Keluarga">Kartu Keluarga</option>
+                                            <option value="KTP Elektronik">KTP Elektronik</option>
+                                            <option value="Kartu Identitas Anak">Kartu Identitas Anak</option>
+                                            <option value="SKPWNI">SKPWNI</option>
+                                            <option value="SKDWNI">SKDWNI</option>
+                                            <option value="Akta Kelahiran">Akta Kelahiran</option>
+                                            <option value="Akta Kematian">Akta Kematian</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Petugas</label>
+                                        <input type="text" id="namapetugas" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">NIP</label>
+                                        <input type="text" id="nip" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Instansi</label>
+                                        <input type="text" id="namainstansi" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Telepon</label>
+                                        <input type="tel" id="telp" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                        <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Foto Petugas -->
+                            <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                    <i class="fas fa-camera mr-2 text-emerald-600"></i>
+                                    Foto Petugas
+                                </h3>
+                                <div class="file-upload-area border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+                                    <p class="text-gray-600 mb-2">Klik untuk upload foto petugas atau drag & drop</p>
+                                    <p class="text-sm text-gray-500">Format: JPG, PNG (Max: 2MB)</p>
+                                    <input type="file" id="fotopetugas" accept="image/*" class="hidden">
+                                    <button type="button" onclick="document.getElementById('fotopetugas').click()" class="mt-4 bg-emerald-500 text-white px-6 py-2 rounded-lg hover:bg-emerald-600 transition-colors">
+                                        Pilih Foto
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Data Pemohon -->
+                            <div class="bg-gradient-to-r from-purple-50 to-violet-50 p-6 rounded-xl">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                    <i class="fas fa-user mr-2 text-violet-600"></i>
+                                    Data Pemohon
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                                        <input type="text" id="namalengkap" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Tempat Lahir</label>
+                                        <input type="text" id="tempatlahir" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Lahir</label>
+                                        <input type="date" id="tanggallahir" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Kelamin</label>
+                                        <select id="jeniskelamin" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent" required>
+                                            <option value="">Pilih Jenis Kelamin</option>
+                                            <option value="Laki-laki">Laki-laki</option>
+                                            <option value="Perempuan">Perempuan</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Ibu</label>
+                                        <input type="text" id="namaibu" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Ayah</label>
+                                        <input type="text" id="namaayah" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Alamat -->
+                            <div class="bg-gradient-to-r from-orange-50 to-amber-50 p-6 rounded-xl">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                    <i class="fas fa-map-marker-alt mr-2 text-amber-600"></i>
+                                    Alamat
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Kecamatan</label>
+                                        <select id="kecamatan" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent" required>
+                                            <option value="">Pilih Kecamatan</option>
+                                            <option value="Tanimbar Selatan">Tanimbar Selatan</option>
+                                            <option value="Selaru">Selaru</option>
+                                            <option value="Wertamrian">Wertamrian</option>
+                                            <option value="Wermaktian">Wermaktian</option>
+                                            <option value="Tanimbar Utara">Tanimbar Utara</option>
+                                            <option value="Fordata">Fordata</option>
+                                            <option value="Wuarlabobar">Wuarlabobar</option>
+                                            <option value="Kormomolin">Kormomolin</option>
+                                            <option value="Nirunmas">Nirunmas</option>
+                                            <option value="Molumaru">Molumaru</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Desa/Kelurahan</label>
+                                        <select id="desakelurahan" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent" required>
+                                            <option value="">Pilih Desa/Kelurahan</option>
+                                        </select>
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">RT/RW</label>
+                                        <input type="text" id="rtrw" placeholder="Contoh: RT 001/RW 002" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Upload Berkas -->
+                            <div class="bg-gradient-to-r from-red-50 to-rose-50 p-6 rounded-xl">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                    <i class="fas fa-file-pdf mr-2 text-rose-600"></i>
+                                    Upload Berkas
+                                </h3>
+                                <div class="file-upload-area border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                                    <i class="fas fa-file-pdf text-4xl text-gray-400 mb-4"></i>
+                                    <p class="text-gray-600 mb-2">Klik untuk upload berkas atau drag & drop</p>
+                                    <p class="text-sm text-gray-500">Format: PDF (Max: 10MB)</p>
+                                    <input type="file" id="unggahberkas" accept=".pdf" class="hidden">
+                                    <button type="button" onclick="document.getElementById('unggahberkas').click()" class="mt-4 bg-rose-500 text-white px-6 py-2 rounded-lg hover:bg-rose-600 transition-colors">
+                                        Pilih Berkas PDF
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Syarat dan Ketentuan -->
+                            <div class="bg-gradient-to-r from-teal-50 to-cyan-50 p-6 rounded-xl">
+                                <div class="flex items-start">
+                                    <input type="checkbox" id="syaratdanketentuan" class="mt-1 mr-3" required>
+                                    <label for="syaratdanketentuan" class="text-sm text-gray-700">
+                                        Saya menyetujui <a href="#" class="text-cyan-600 hover:underline">syarat dan ketentuan</a> yang berlaku dan menjamin kebenaran data yang saya berikan. Saya bertanggung jawab penuh atas keakuratan informasi yang disampaikan.
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-center pt-6">
+                                <button type="submit" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-12 py-4 rounded-full font-semibold text-lg hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg">
+                                    <i class="fas fa-paper-plane mr-2"></i>
+                                    Kirim Berkas
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mobile Form -->
+            <div class="md:hidden">
+                <form id="registrationFormMobile" class="space-y-4">
+                    <!-- Informasi Petugas -->
+                    <div class="mobile-form-section">
+                        <h3><i class="fas fa-user-tie text-indigo-600"></i>Informasi Petugas</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Pengajuan</label>
+                                <input type="date" id="tanggalPengajuanMobile" class="mobile-input" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Pelaporan</label>
+                                <select id="jenispelaporanMobile" class="mobile-input" required>
+                                    <option value="">Pilih Jenis Dokumen</option>
+                                    <option value="Kartu Keluarga">Kartu Keluarga</option>
+                                    <option value="KTP Elektronik">KTP Elektronik</option>
+                                    <option value="Kartu Identitas Anak">Kartu Identitas Anak</option>
+                                    <option value="SKPWNI">SKPWNI</option>
+                                    <option value="SKDWNI">SKDWNI</option>
+                                    <option value="Akta Kelahiran">Akta Kelahiran</option>
+                                    <option value="Akta Kematian">Akta Kematian</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Petugas</label>
+                                <input type="text" id="namapetugasMobile" class="mobile-input" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">NIP</label>
+                                <input type="text" id="nipMobile" class="mobile-input" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Instansi</label>
+                                <input type="text" id="namainstansiMobile" class="mobile-input" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Telepon</label>
+                                <input type="tel" id="telpMobile" class="mobile-input" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                <input type="email" id="emailMobile" class="mobile-input" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Foto Petugas -->
+                    <div class="mobile-form-section">
+                        <h3><i class="fas fa-camera text-emerald-600"></i>Foto Petugas</h3>
+                        <div class="mobile-file-upload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p class="text-gray-600 mb-2">Tap untuk upload foto</p>
+                            <p class="text-sm text-gray-500">JPG, PNG (Max: 2MB)</p>
+                            <input type="file" id="fotopetugasMobile" accept="image/*" class="hidden">
+                            <button type="button" onclick="document.getElementById('fotopetugasMobile').click()" class="mt-4 mobile-button">
+                                Pilih Foto
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Data Pemohon -->
+                    <div class="mobile-form-section">
+                        <h3><i class="fas fa-user text-violet-600"></i>Data Pemohon</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                                <input type="text" id="namalengkapMobile" class="mobile-input" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tempat Lahir</label>
+                                <input type="text" id="tempatlahirMobile" class="mobile-input" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Lahir</label>
+                                <input type="date" id="tanggallahirMobile" class="mobile-input" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Kelamin</label>
+                                <select id="jeniskelaminMobile" class="mobile-input" required>
+                                    <option value="">Pilih Jenis Kelamin</option>
+                                    <option value="Laki-laki">Laki-laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Ibu</label>
+                                <input type="text" id="namaibuMobile" class="mobile-input" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Ayah</label>
+                                <input type="text" id="namaayahMobile" class="mobile-input" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alamat -->
+                    <div class="mobile-form-section">
+                        <h3><i class="fas fa-map-marker-alt text-amber-600"></i>Alamat</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Kecamatan</label>
+                                <select id="kecamatanMobile" class="mobile-input" required>
+                                    <option value="">Pilih Kecamatan</option>
+                                    <option value="Tanimbar Selatan">Tanimbar Selatan</option>
+                                    <option value="Selaru">Selaru</option>
+                                    <option value="Wertamrian">Wertamrian</option>
+                                    <option value="Wermaktian">Wermaktian</option>
+                                    <option value="Tanimbar Utara">Tanimbar Utara</option>
+                                    <option value="Fordata">Fordata</option>
+                                    <option value="Wuarlabobar">Wuarlabobar</option>
+                                    <option value="Kormomolin">Kormomolin</option>
+                                    <option value="Nirunmas">Nirunmas</option>
+                                    <option value="Molumaru">Molumaru</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Desa/Kelurahan</label>
+                                <select id="desakelurahanMobile" class="mobile-input" required>
+                                    <option value="">Pilih Desa/Kelurahan</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">RT/RW</label>
+                                <input type="text" id="rtrwMobile" placeholder="RT 001/RW 002" class="mobile-input" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upload Berkas -->
+                    <div class="mobile-form-section">
+                        <h3><i class="fas fa-file-pdf text-rose-600"></i>Upload Berkas</h3>
+                        <div class="mobile-file-upload">
+                            <i class="fas fa-file-pdf"></i>
+                            <p class="text-gray-600 mb-2">Tap untuk upload berkas</p>
+                            <p class="text-sm text-gray-500">PDF (Max: 10MB)</p>
+                            <input type="file" id="unggahberkasMobile" accept=".pdf" class="hidden">
+                            <button type="button" onclick="document.getElementById('unggahberkasMobile').click()" class="mt-4 mobile-button">
+                                Pilih Berkas PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Syarat dan Ketentuan -->
+                    <div class="mobile-form-section">
+                        <div class="flex items-start">
+                            <input type="checkbox" id="syaratdanketentuanMobile" class="mt-1 mr-3" required>
+                            <label for="syaratdanketentuanMobile" class="text-sm text-gray-700">
+                                Saya menyetujui <a href="#" class="text-cyan-600 hover:underline">syarat dan ketentuan</a> yang berlaku dan menjamin kebenaran data yang saya berikan.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="mobile-form-section">
+                        <button type="submit" class="mobile-button">
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            Kirim Berkas
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- About Page -->
+        <div id="tentangPage" class="page-content hidden">
+            <!-- Mobile Header -->
+            <div class="mobile-header md:hidden">
+                <div class="flex items-center justify-between">
+                    <button onclick="showPage('dashboard')" class="text-white">
+                        <i class="fas fa-arrow-left text-xl"></i>
+                    </button>
+                    <h2 class="text-lg font-semibold">Tentang Kami</h2>
+                    <div class="w-6"></div>
+                </div>
+            </div>
+
+            <!-- Mobile About Content -->
+            <div class="md:hidden">
+                <div class="mobile-about-card">
+                    <i class="fas fa-id-card text-indigo-600"></i>
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Walangaduk</h2>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Pionir transformasi digital administrasi kependudukan di Kepulauan Tanimbar. Kami percaya teknologi harus menjadi jembatan, bukan penghalang, dalam memberikan pelayanan publik berkualitas.
+                    </p>
+                </div>
+
+                <div class="mobile-about-card">
+                    <i class="fas fa-eye text-blue-600"></i>
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">Visi Kami</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Menjadi garda terdepan revolusi digital pelayanan publik, menciptakan ekosistem administrasi yang humanis dan inklusif untuk seluruh warga Kepulauan Tanimbar.
+                    </p>
+                </div>
+
+                <div class="mobile-about-card">
+                    <i class="fas fa-rocket text-purple-600"></i>
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">Inovasi</h3>
+                    <p class="text-gray-600 text-sm">Menggunakan teknologi terdepan untuk pelayanan yang efisien dan modern</p>
+                </div>
+
+                <div class="mobile-about-card">
+                    <i class="fas fa-shield-alt text-green-600"></i>
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">Keamanan</h3>
+                    <p class="text-gray-600 text-sm">Sistem keamanan berlapis untuk melindungi data pribadi dan dokumen penting</p>
+                </div>
+
+                <div class="mobile-about-card">
+                    <i class="fas fa-users text-orange-600"></i>
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">Pelayanan</h3>
+                    <p class="text-gray-600 text-sm">Tim profesional yang siap membantu dalam setiap proses pengajuan dokumen</p>
+                </div>
+
+                <div class="mobile-about-card">
+                    <i class="fas fa-globe text-indigo-600"></i>
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">Jangkauan</h3>
+                    <p class="text-gray-600 text-sm">Melayani 10 kecamatan di wilayah Kepulauan Tanimbar</p>
+                </div>
+            </div>
+
+            <!-- Desktop About Content -->
+            <section class="py-16 bg-gradient-to-br from-indigo-50 to-purple-50 min-h-screen hidden md:block">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h1 class="text-4xl font-bold text-gray-800 mb-6">Tentang Walangaduk</h1>
+                        <p class="text-xl text-gray-600 max-w-4xl mx-auto">
+                            Lahir dari semangat untuk memberikan pelayanan terbaik, Walangaduk adalah pionir transformasi digital administrasi kependudukan di Kepulauan Tanimbar. Kami percaya bahwa teknologi harus menjadi jembatan, bukan penghalang, dalam memberikan pelayanan publik yang berkualitas.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                        <div>
+                            <h2 class="text-3xl font-bold text-gray-800 mb-6">Visi Kami</h2>
+                            <p class="text-gray-600 mb-6 leading-relaxed">
+                                "Menjadi garda terdepan dalam revolusi digital pelayanan publik, menciptakan ekosistem administrasi kependudukan yang tidak hanya cepat dan akurat, tetapi juga humanis dan inklusif. Kami bermimpi melihat setiap warga Kepulauan Tanimbar dapat mengakses haknya dengan mudah, kapan saja, dan di mana saja."
+                            </p>
+                            <div class="space-y-4">
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                    <span class="text-gray-700">Pelayanan 24/7 Online</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                    <span class="text-gray-700">Proses Cepat dan Akurat</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                    <span class="text-gray-700">Keamanan Data Terjamin</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-8 rounded-2xl shadow-xl">
+                            <div class="text-center">
+                                <i class="fas fa-globe text-6xl text-indigo-600 mb-6"></i>
+                                <h3 class="text-2xl font-bold text-gray-800 mb-4">Jangkauan Pelayanan</h3>
+                                <p class="text-gray-600">Melayani 10 kecamatan di wilayah Kepulauan Tanimbar dengan komitmen pelayanan terbaik</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                        <div class="bg-white p-8 rounded-2xl shadow-xl text-center">
+                            <i class="fas fa-rocket text-4xl text-blue-600 mb-4"></i>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">Inovasi</h3>
+                            <p class="text-gray-600">Menggunakan teknologi terdepan untuk memberikan pelayanan yang efisien dan modern</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-2xl shadow-xl text-center">
+                            <i class="fas fa-shield-alt text-4xl text-green-600 mb-4"></i>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">Keamanan</h3>
+                            <p class="text-gray-600">Sistem keamanan berlapis untuk melindungi data pribadi dan dokumen penting</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-2xl shadow-xl text-center">
+                            <i class="fas fa-users text-4xl text-purple-600 mb-4"></i>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">Pelayanan</h3>
+                            <p class="text-gray-600">Tim profesional yang siap membantu dalam setiap proses pengajuan dokumen</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-2xl shadow-xl">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Misi Kami</h2>
+                        <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">
+                            Setiap langkah yang kami ambil didorong oleh komitmen untuk menciptakan perubahan positif dalam kehidupan masyarakat
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <ul class="space-y-4">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-heart text-red-500 mr-3 mt-1"></i>
+                                        <span class="text-gray-700">Menghadirkan pelayanan yang humanis dan mudah dipahami oleh semua kalangan, dari generasi digital hingga yang masih belajar teknologi</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-rocket text-blue-500 mr-3 mt-1"></i>
+                                        <span class="text-gray-700">Mentransformasi proses administrasi yang rumit menjadi pengalaman yang menyenangkan dan efisien</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-shield-alt text-green-500 mr-3 mt-1"></i>
+                                        <span class="text-gray-700">Menjaga kepercayaan masyarakat dengan standar keamanan dan privasi data tertinggi</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <ul class="space-y-4">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-eye text-purple-500 mr-3 mt-1"></i>
+                                        <span class="text-gray-700">Membangun transparansi dalam setiap proses, sehingga masyarakat dapat memantau perkembangan pengajuan mereka</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-hands-helping text-orange-500 mr-3 mt-1"></i>
+                                        <span class="text-gray-700">Menjadi mitra terpercaya pemerintah daerah dalam mewujudkan smart governance</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-star text-yellow-500 mr-3 mt-1"></i>
+                                        <span class="text-gray-700">Menciptakan standar baru pelayanan publik yang menjadi inspirasi bagi daerah lain</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Contact Page -->
+        <div id="kontakPage" class="page-content hidden">
+            <!-- Mobile Header -->
+            <div class="mobile-header md:hidden">
+                <div class="flex items-center justify-between">
+                    <button onclick="showPage('dashboard')" class="text-white">
+                        <i class="fas fa-arrow-left text-xl"></i>
+                    </button>
+                    <h2 class="text-lg font-semibold">Kontak Kami</h2>
+                    <div class="w-6"></div>
+                </div>
+            </div>
+
+            <!-- Mobile Contact Content -->
+            <div class="md:hidden">
+                <div class="mobile-contact-card">
+                    <div class="mobile-contact-icon bg-indigo-100">
+                        <i class="fas fa-map-marker-alt text-indigo-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-1">Alamat</h3>
+                        <p class="text-gray-600 text-sm">Jl. Pemerintahan No. 1, Saumlaki<br>Kepulauan Tanimbar, Maluku</p>
+                    </div>
+                </div>
+
+                <div class="mobile-contact-card">
+                    <div class="mobile-contact-icon bg-green-100">
+                        <i class="fas fa-phone text-green-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-1">Telepon</h3>
+                        <p class="text-gray-600 text-sm">+62 123 456 7890</p>
+                    </div>
+                </div>
+
+                <div class="mobile-contact-card">
+                    <div class="mobile-contact-icon bg-blue-100">
+                        <i class="fas fa-envelope text-blue-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-1">Email</h3>
+                        <p class="text-gray-600 text-sm">info@walangaduk.go.id</p>
+                    </div>
+                </div>
+
+                <div class="mobile-contact-card">
+                    <div class="mobile-contact-icon bg-purple-100">
+                        <i class="fas fa-clock text-purple-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-1">Jam Operasional</h3>
+                        <p class="text-gray-600 text-sm">Senin - Jumat: 08:00 - 16:00<br>Sabtu: 08:00 - 12:00</p>
+                    </div>
+                </div>
+
+                <!-- Mobile Contact Form -->
+                <div class="mobile-form-section">
+                    <h3><i class="fas fa-paper-plane text-indigo-600"></i>Kirim Pesan</h3>
+                    <form id="contactFormMobile" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                            <input type="text" class="mobile-input" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" class="mobile-input" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Subjek</label>
+                            <select class="mobile-input" required>
+                                <option value="">Pilih Subjek</option>
+                                <option value="Bantuan Teknis">Bantuan Teknis</option>
+                                <option value="Pertanyaan Umum">Pertanyaan Umum</option>
+                                <option value="Saran dan Masukan">Saran dan Masukan</option>
+                                <option value="Keluhan">Keluhan</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pesan</label>
+                            <textarea rows="4" class="mobile-input" placeholder="Tulis pesan Anda di sini..." required></textarea>
+                        </div>
+                        <button type="submit" class="mobile-button">
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            Kirim Pesan
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Mobile Social Media -->
+                <div class="mobile-form-section">
+                    <h3><i class="fas fa-share-alt text-indigo-600"></i>Media Sosial</h3>
+                    <div class="flex justify-center space-x-4">
+                        <a href="#" class="bg-blue-600 text-white p-4 rounded-full hover:bg-blue-700 transition-colors">
+                            <i class="fab fa-facebook-f text-xl"></i>
+                        </a>
+                        <a href="#" class="bg-blue-400 text-white p-4 rounded-full hover:bg-blue-500 transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="bg-pink-600 text-white p-4 rounded-full hover:bg-pink-700 transition-colors">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="bg-green-600 text-white p-4 rounded-full hover:bg-green-700 transition-colors">
+                            <i class="fab fa-whatsapp text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Desktop Contact Content -->
+            <section class="py-16 bg-gradient-to-br from-indigo-50 to-purple-50 min-h-screen hidden md:block">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h1 class="text-4xl font-bold text-gray-800 mb-6">Hubungi Kami</h1>
+                        <p class="text-xl text-gray-600 max-w-4xl mx-auto">
+                            Kami selalu siap mendengarkan Anda! Tim Walangaduk berkomitmen memberikan respons terbaik untuk setiap pertanyaan, saran, atau bantuan yang Anda butuhkan. Karena kepuasan Anda adalah prioritas utama kami.
+                        </p>
+                        <div class="mt-8 bg-gradient-to-r from-indigo-100 to-purple-100 p-6 rounded-xl max-w-2xl mx-auto">
+                            <p class="text-indigo-800 font-semibold">
+                                <i class="fas fa-clock mr-2"></i>
+                                Respons dalam 1x24 jam • Pelayanan Ramah • Solusi Terpercaya
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                        <!-- Contact Information -->
+                        <div class="space-y-8">
+                            <div class="bg-white p-8 rounded-2xl shadow-xl">
+                                <h2 class="text-2xl font-bold text-gray-800 mb-6">Informasi Kontak</h2>
+                                <div class="space-y-6">
+                                    <div class="flex items-center">
+                                        <div class="bg-indigo-100 p-3 rounded-full mr-4">
+                                            <i class="fas fa-map-marker-alt text-indigo-600"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold text-gray-800">Alamat</h3>
+                                            <p class="text-gray-600">Jl. Pemerintahan No. 1, Saumlaki<br>Kepulauan Tanimbar, Maluku</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="bg-green-100 p-3 rounded-full mr-4">
+                                            <i class="fas fa-phone text-green-600"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold text-gray-800">Telepon</h3>
+                                            <p class="text-gray-600">+62 123 456 7890</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                            <i class="fas fa-envelope text-blue-600"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold text-gray-800">Email</h3>
+                                            <p class="text-gray-600">info@walangaduk.go.id</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="bg-purple-100 p-3 rounded-full mr-4">
+                                            <i class="fas fa-clock text-purple-600"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold text-gray-800">Jam Operasional</h3>
+                                            <p class="text-gray-600">Senin - Jumat: 08:00 - 16:00<br>Sabtu: 08:00 - 12:00</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-8 rounded-2xl shadow-xl">
+                                <h2 class="text-2xl font-bold text-gray-800 mb-6">Media Sosial</h2>
+                                <div class="flex space-x-4">
+                                    <a href="#" class="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition-colors">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </a>
+                                    <a href="#" class="bg-blue-400 text-white p-3 rounded-full hover:bg-blue-500 transition-colors">
+                                        <i class="fab fa-twitter"></i>
+                                    </a>
+                                    <a href="#" class="bg-pink-600 text-white p-3 rounded-full hover:bg-pink-700 transition-colors">
+                                        <i class="fab fa-instagram"></i>
+                                    </a>
+                                    <a href="#" class="bg-green-600 text-white p-3 rounded-full hover:bg-green-700 transition-colors">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Form -->
+                        <div class="bg-white p-8 rounded-2xl shadow-xl">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-6">Kirim Pesan</h2>
+                            <form id="contactForm" class="space-y-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                                    <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                    <input type="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Subjek</label>
+                                    <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                                        <option value="">Pilih Subjek</option>
+                                        <option value="Bantuan Teknis">Bantuan Teknis</option>
+                                        <option value="Pertanyaan Umum">Pertanyaan Umum</option>
+                                        <option value="Saran dan Masukan">Saran dan Masukan</option>
+                                        <option value="Keluhan">Keluhan</option>
+                                        <option value="Lainnya">Lainnya</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Pesan</label>
+                                    <textarea rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Tulis pesan Anda di sini..." required></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all">
+                                    <i class="fas fa-paper-plane mr-2"></i>
+                                    Kirim Pesan
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-2xl shadow-xl max-w-md mx-4 text-center">
+            <div class="mb-6">
+                <i class="fas fa-check-circle text-6xl text-green-500"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Berhasil Dikirim!</h3>
+            <p class="text-gray-600 mb-6">Data pengajuan dokumen Anda telah berhasil dikirim dan akan diproses segera.</p>
+            <button onclick="closeModal()" class="bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors">
+                Tutup
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Navigation Functions
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(page => page.classList.add('hidden'));
+            
+            // Show selected page
+            document.getElementById(pageId + 'Page').classList.remove('hidden');
+            
+            // Update active nav link
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('text-indigo-600', 'font-semibold'));
+            
+            // Update mobile navigation
+            updateMobileNav(pageId);
+            
+            // Add fade-in animation
+            document.getElementById(pageId + 'Page').classList.add('fade-in');
+            
+            // Set current date for registration form
+            if (pageId === 'registrasi') {
+                const today = new Date().toISOString().split('T')[0];
+                const desktopInput = document.getElementById('tanggalPengajuan');
+                const mobileInput = document.getElementById('tanggalPengajuanMobile');
+                
+                if (desktopInput) desktopInput.value = today;
+                if (mobileInput) mobileInput.value = today;
+            }
+        }
+
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Counter Animation
+        function animateCounter(elementId, targetValue, duration = 2000) {
+            const element = document.getElementById(elementId);
+            const startValue = 0;
+            const increment = targetValue / (duration / 16);
+            let currentValue = startValue;
+            
+            const timer = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= targetValue) {
+                    element.textContent = targetValue;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(currentValue);
+                }
+            }, 16);
+        }
+
+        // File Upload Handlers
+        function setupFileUpload() {
+            const fileInputs = ['fotopetugas', 'unggahberkas'];
+            
+            fileInputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                const uploadArea = input.closest('.file-upload-area');
+                
+                input.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const fileName = file.name;
+                        const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                        uploadArea.innerHTML = `
+                            <i class="fas fa-check-circle text-4xl text-green-500 mb-4"></i>
+                            <p class="text-green-600 font-semibold">${fileName}</p>
+                            <p class="text-sm text-gray-500">${fileSize} MB</p>
+                            <button type="button" onclick="resetFileUpload('${inputId}')" class="mt-4 bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition-colors">
+                                Hapus File
+                            </button>
+                        `;
+                    }
+                });
+                
+                // Drag and drop functionality
+                uploadArea.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    uploadArea.classList.add('dragover');
+                });
+                
+                uploadArea.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    uploadArea.classList.remove('dragover');
+                });
+                
+                uploadArea.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    uploadArea.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        input.files = files;
+                        input.dispatchEvent(new Event('change'));
+                    }
+                });
+            });
+        }
+
+        function resetFileUpload(inputId) {
+            const input = document.getElementById(inputId);
+            const uploadArea = input.closest('.file-upload-area');
+            input.value = '';
+            
+            const isPhoto = inputId === 'fotopetugas';
+            const icon = isPhoto ? 'fa-cloud-upload-alt' : 'fa-file-pdf';
+            const text = isPhoto ? 'Klik untuk upload foto petugas atau drag & drop' : 'Klik untuk upload berkas atau drag & drop';
+            const format = isPhoto ? 'Format: JPG, PNG (Max: 2MB)' : 'Format: PDF (Max: 10MB)';
+            const buttonText = isPhoto ? 'Pilih Foto' : 'Pilih Berkas PDF';
+            const buttonColor = isPhoto ? 'emerald' : 'rose';
+            
+            uploadArea.innerHTML = `
+                <i class="fas ${icon} text-4xl text-gray-400 mb-4"></i>
+                <p class="text-gray-600 mb-2">${text}</p>
+                <p class="text-sm text-gray-500">${format}</p>
+                <button type="button" onclick="document.getElementById('${inputId}').click()" class="mt-4 bg-${buttonColor}-500 text-white px-6 py-2 rounded-lg hover:bg-${buttonColor}-600 transition-colors">
+                    ${buttonText}
+                </button>
+            `;
+        }
+
+        // Form Submission
+        function handleFormSubmission() {
+            document.getElementById('registrationForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Simulate form processing
+                const submitButton = e.target.querySelector('button[type="submit"]');
+                const originalText = submitButton.innerHTML;
+                
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Mengirim...';
+                submitButton.disabled = true;
+                
+                setTimeout(() => {
+                    // Simulate successful submission
+                    showSuccessModal();
+                    
+                    // Reset form
+                    e.target.reset();
+                    resetFileUpload('fotopetugas');
+                    resetFileUpload('unggahberkas');
+                    
+                    // Reset button
+                    submitButton.innerHTML = originalText;
+                    submitButton.disabled = false;
+                    
+                    // Set current date again
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById('tanggalPengajuan').value = today;
+                }, 2000);
+            });
+            
+            // Contact form submission
+            document.getElementById('contactForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const submitButton = e.target.querySelector('button[type="submit"]');
+                const originalText = submitButton.innerHTML;
+                
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Mengirim...';
+                submitButton.disabled = true;
+                
+                setTimeout(() => {
+                    alert('Pesan Anda telah berhasil dikirim! Kami akan merespons dalam 1x24 jam.');
+                    e.target.reset();
+                    submitButton.innerHTML = originalText;
+                    submitButton.disabled = false;
+                }, 1500);
+            });
+        }
+
+        function showSuccessModal() {
+            document.getElementById('successModal').classList.remove('hidden');
+            document.getElementById('successModal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').classList.add('hidden');
+            document.getElementById('successModal').classList.remove('flex');
+        }
+
+        // Update mobile navigation active state
+        function updateMobileNav(activePageId) {
+            const navItems = document.querySelectorAll('.mobile-nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            
+            const activeNav = document.getElementById('nav-' + activePageId);
+            if (activeNav) {
+                activeNav.classList.add('active');
+            }
+        }
+
+        // Village Data by District
+        const villageData = {
+            "Tanimbar Selatan": ["Saumlaki", "Saumlaki Utara", "Wowonda", "Ilngei", "Kabiarat", "Lauran", "Sifnana", "Olilit Raya", "Lermatang", "Latdalam", "Bomaki", "Matakus"],
+            "Selaru": ["Adaut", "Namtabung", "Kandar", "Lingat", "Fursuy", "Werain", "Eliasa"],
+            "Wertamrian": ["Tumbur", "Lorulun", "Atubul Dol", "Amdasa", "Sangliat Krawain", "Arui Bab", "Arui Das", "Sangliat Dol", "Atubul Da"],
+            "Wermaktian": ["Kamatubun", "Rumah Salut", "Welutu", "Themin", "Weratan", "Wermatan", "Otemer", "Makatian", "Marantutul"],
+            "Tanimbar Utara": ["Lelingluan", "Ritabel", "Ridool", "Watidal", "Keliobar", "Kelaan", "Lamdesar Barat", "Lamdesar Timur"],
+            "Fordata": ["Romean", "Rumngeur", "Awear", "Sofyanin", "Walerang", "Adodo Fordata"],
+            "Wuarlabobar": ["Abat", "Labobar", "Watmasa", "Awear Rumngeur", "Karatat", "Wunlah", "Kiloon", "Lingada", "Teineman", "Wabar", "Romnus"],
+            "Kormomolin": ["Lumasebu", "Kilmasa", "Meyano Bab", "Alusi Krawain", "Alusi Kelaan", "Alusi Bukjalim", "Alusi Tamrian", "Alusi Batjas", "Lorwembun", "Meyano Das"],
+            "Nirunmas": ["Arma", "Watmuri", "Manglusi", "Tutukembong", "Waturu"],
+            "Molumaru": ["Wedangkou", "Adodo Molu", "Wulmasa", "Tutunametal", "Nurkat"]
+        };
+
+        // Update village dropdown based on selected district
+        function updateVillageDropdown(districtSelectId, villageSelectId) {
+            const districtSelect = document.getElementById(districtSelectId);
+            const villageSelect = document.getElementById(villageSelectId);
+            
+            if (!districtSelect || !villageSelect) return;
+            
+            districtSelect.addEventListener('change', function() {
+                const selectedDistrict = this.value;
+                
+                // Clear village dropdown
+                villageSelect.innerHTML = '<option value="">Pilih Desa/Kelurahan</option>';
+                
+                if (selectedDistrict && villageData[selectedDistrict]) {
+                    // Add villages for selected district
+                    villageData[selectedDistrict].forEach(village => {
+                        const option = document.createElement('option');
+                        option.value = village;
+                        option.textContent = village;
+                        villageSelect.appendChild(option);
+                    });
+                    
+                    // Enable village dropdown
+                    villageSelect.disabled = false;
+                    villageSelect.classList.remove('opacity-50');
+                } else {
+                    // Disable village dropdown if no district selected
+                    villageSelect.disabled = true;
+                    villageSelect.classList.add('opacity-50');
+                }
+            });
+        }
+
+        // Initialize village verification
+        function initializeVillageVerification() {
+            // Setup for desktop form
+            updateVillageDropdown('kecamatan', 'desakelurahan');
+            
+            // Setup for mobile form
+            updateVillageDropdown('kecamatanMobile', 'desakelurahanMobile');
+            
+            // Initially disable village dropdowns
+            const villageSelects = ['desakelurahan', 'desakelurahanMobile'];
+            villageSelects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                if (select) {
+                    select.disabled = true;
+                    select.classList.add('opacity-50');
+                }
+            });
+        }
+
+        // Initialize Application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show dashboard by default
+            showPage('dashboard');
+            
+            // Initialize village verification system
+            initializeVillageVerification();
+            
+            // Start counter animations for both desktop and mobile
+            setTimeout(() => {
+                animateCounter('counter1', 1247);
+                animateCounter('counter2', 89);
+                animateCounter('counter3', 10);
+                animateCounter('counter1-mobile', 1247);
+                animateCounter('counter2-mobile', 89);
+                animateCounter('counter3-mobile', 10);
+            }, 500);
+            
+            // Setup file uploads
+            setupFileUpload();
+            
+            // Setup form submissions
+            handleFormSubmission();
+            
+            // Setup mobile form submissions
+            document.getElementById('registrationFormMobile').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const submitButton = e.target.querySelector('button[type="submit"]');
+                const originalText = submitButton.innerHTML;
+                
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Mengirim...';
+                submitButton.disabled = true;
+                
+                setTimeout(() => {
+                    showSuccessModal();
+                    e.target.reset();
+                    
+                    // Reset mobile file uploads
+                    const mobileFileInputs = ['fotopetugasMobile', 'unggahberkasMobile'];
+                    mobileFileInputs.forEach(inputId => {
+                        const input = document.getElementById(inputId);
+                        if (input) {
+                            input.value = '';
+                            const uploadArea = input.closest('.mobile-file-upload');
+                            if (uploadArea) {
+                                const isPhoto = inputId.includes('foto');
+                                const icon = isPhoto ? 'fa-cloud-upload-alt' : 'fa-file-pdf';
+                                const text = isPhoto ? 'Tap untuk upload foto' : 'Tap untuk upload berkas';
+                                const format = isPhoto ? 'JPG, PNG (Max: 2MB)' : 'PDF (Max: 10MB)';
+                                const buttonText = isPhoto ? 'Pilih Foto' : 'Pilih Berkas PDF';
+                                
+                                uploadArea.innerHTML = `
+                                    <i class="fas ${icon}"></i>
+                                    <p class="text-gray-600 mb-2">${text}</p>
+                                    <p class="text-sm text-gray-500">${format}</p>
+                                    <input type="file" id="${inputId}" ${isPhoto ? 'accept="image/*"' : 'accept=".pdf"'} class="hidden">
+                                    <button type="button" onclick="document.getElementById('${inputId}').click()" class="mt-4 mobile-button">
+                                        ${buttonText}
+                                    </button>
+                                `;
+                            }
+                        }
+                    });
+                    
+                    submitButton.innerHTML = originalText;
+                    submitButton.disabled = false;
+                    
+                    // Set current date again
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById('tanggalPengajuanMobile').value = today;
+                }, 2000);
+            });
+            
+            // Setup mobile contact form
+            document.getElementById('contactFormMobile').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const submitButton = e.target.querySelector('button[type="submit"]');
+                const originalText = submitButton.innerHTML;
+                
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Mengirim...';
+                submitButton.disabled = true;
+                
+                setTimeout(() => {
+                    alert('Pesan Anda telah berhasil dikirim! Kami akan merespons dalam 1x24 jam.');
+                    e.target.reset();
+                    submitButton.innerHTML = originalText;
+                    submitButton.disabled = false;
+                }, 1500);
+            });
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                const mobileMenu = document.getElementById('mobileMenu');
+                const menuButton = e.target.closest('button');
+                
+                if (!mobileMenu.contains(e.target) && !menuButton) {
+                    mobileMenu.classList.remove('active');
+                }
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98a2bac9a666411c',t:'MTc1OTcyODIzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
