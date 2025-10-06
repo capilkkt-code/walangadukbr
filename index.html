@@ -1592,35 +1592,120 @@
             `;
         }
 
+        // Google Sheets Configuration
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbybfqdjYNWcaNSpDsDkBPeAiCBeo1utda15DR2C0WAFensbhwMAgH7x-Y5ZLynBipk4Iw/exec';
+        
+        // Convert file to base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                    const base64 = reader.result.split(',')[1];
+                    resolve(base64);
+                };
+                reader.onerror = error => reject(error);
+            });
+        }
+        
+        // Send data to Google Sheets
+        async function sendToGoogleSheets(formData) {
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                console.error('Error sending to Google Sheets:', error);
+                throw error;
+            }
+        }
+        
         // Form Submission
         function handleFormSubmission() {
-            document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            document.getElementById('registrationForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
-                // Simulate form processing
                 const submitButton = e.target.querySelector('button[type="submit"]');
                 const originalText = submitButton.innerHTML;
                 
-                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Mengirim...';
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Mengirim ke Database...';
                 submitButton.disabled = true;
                 
-                setTimeout(() => {
-                    // Simulate successful submission
-                    showSuccessModal();
+                try {
+                    // Collect form data
+                    const formData = {
+                        tanggalpengajuan: document.getElementById('tanggalPengajuan').value,
+                        jenipelaporan: document.getElementById('jenispelaporan').value,
+                        namapetugas: document.getElementById('namapetugas').value,
+                        nip: document.getElementById('nip').value,
+                        namainstansi: document.getElementById('namainstansi').value,
+                        telp: document.getElementById('telp').value,
+                        email: document.getElementById('email').value,
+                        namalengkap: document.getElementById('namalengkap').value,
+                        tempatlahir: document.getElementById('tempatlahir').value,
+                        tanggallahir: document.getElementById('tanggallahir').value,
+                        jeniskelamin: document.getElementById('jeniskelamin').value,
+                        namaibu: document.getElementById('namaibu').value,
+                        namaayah: document.getElementById('namaayah').value,
+                        kecamatan: document.getElementById('kecamatan').value,
+                        desakelurahan: document.getElementById('desakelurahan').value,
+                        rtrw: document.getElementById('rtrw').value,
+                        syaratdanketentuan: document.getElementById('syaratdanketentuan').checked ? 'Ya' : 'Tidak'
+                    };
                     
-                    // Reset form
-                    e.target.reset();
-                    resetFileUpload('fotopetugas');
-                    resetFileUpload('unggahberkas');
+                    // Handle file uploads
+                    const fotoInput = document.getElementById('fotopetugas');
+                    const berkasInput = document.getElementById('unggahberkas');
                     
+                    if (fotoInput.files[0]) {
+                        const fotoBase64 = await fileToBase64(fotoInput.files[0]);
+                        formData.fotopetugas = {
+                            data: fotoBase64,
+                            name: fotoInput.files[0].name
+                        };
+                    }
+                    
+                    if (berkasInput.files[0]) {
+                        const berkasBase64 = await fileToBase64(berkasInput.files[0]);
+                        formData.unggahberkas = {
+                            data: berkasBase64,
+                            name: berkasInput.files[0].name
+                        };
+                    }
+                    
+                    // Send to Google Sheets
+                    const result = await sendToGoogleSheets(formData);
+                    
+                    if (result.status === 'success') {
+                        showSuccessModal();
+                        
+                        // Reset form
+                        e.target.reset();
+                        resetFileUpload('fotopetugas');
+                        resetFileUpload('unggahberkas');
+                        
+                        // Set current date again
+                        const today = new Date().toISOString().split('T')[0];
+                        document.getElementById('tanggalPengajuan').value = today;
+                    } else {
+                        throw new Error(result.message || 'Gagal mengirim data');
+                    }
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat mengirim data: ' + error.message);
+                } finally {
                     // Reset button
                     submitButton.innerHTML = originalText;
                     submitButton.disabled = false;
-                    
-                    // Set current date again
-                    const today = new Date().toISOString().split('T')[0];
-                    document.getElementById('tanggalPengajuan').value = today;
-                }, 2000);
+                }
             });
             
             // Contact form submission
@@ -1754,53 +1839,105 @@
             handleFormSubmission();
             
             // Setup mobile form submissions
-            document.getElementById('registrationFormMobile').addEventListener('submit', function(e) {
+            document.getElementById('registrationFormMobile').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
                 const submitButton = e.target.querySelector('button[type="submit"]');
                 const originalText = submitButton.innerHTML;
                 
-                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Mengirim...';
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Mengirim ke Database...';
                 submitButton.disabled = true;
                 
-                setTimeout(() => {
-                    showSuccessModal();
-                    e.target.reset();
+                try {
+                    // Collect mobile form data
+                    const formData = {
+                        tanggalpengajuan: document.getElementById('tanggalPengajuanMobile').value,
+                        jenipelaporan: document.getElementById('jenispelaporanMobile').value,
+                        namapetugas: document.getElementById('namapetugasMobile').value,
+                        nip: document.getElementById('nipMobile').value,
+                        namainstansi: document.getElementById('namainstansiMobile').value,
+                        telp: document.getElementById('telpMobile').value,
+                        email: document.getElementById('emailMobile').value,
+                        namalengkap: document.getElementById('namalengkapMobile').value,
+                        tempatlahir: document.getElementById('tempatlahirMobile').value,
+                        tanggallahir: document.getElementById('tanggallahirMobile').value,
+                        jeniskelamin: document.getElementById('jeniskelaminMobile').value,
+                        namaibu: document.getElementById('namaibuMobile').value,
+                        namaayah: document.getElementById('namaayahMobile').value,
+                        kecamatan: document.getElementById('kecamatanMobile').value,
+                        desakelurahan: document.getElementById('desakelurahanMobile').value,
+                        rtrw: document.getElementById('rtrwMobile').value,
+                        syaratdanketentuan: document.getElementById('syaratdanketentuanMobile').checked ? 'Ya' : 'Tidak'
+                    };
                     
-                    // Reset mobile file uploads
-                    const mobileFileInputs = ['fotopetugasMobile', 'unggahberkasMobile'];
-                    mobileFileInputs.forEach(inputId => {
-                        const input = document.getElementById(inputId);
-                        if (input) {
-                            input.value = '';
-                            const uploadArea = input.closest('.mobile-file-upload');
-                            if (uploadArea) {
-                                const isPhoto = inputId.includes('foto');
-                                const icon = isPhoto ? 'fa-cloud-upload-alt' : 'fa-file-pdf';
-                                const text = isPhoto ? 'Tap untuk upload foto' : 'Tap untuk upload berkas';
-                                const format = isPhoto ? 'JPG, PNG (Max: 2MB)' : 'PDF (Max: 10MB)';
-                                const buttonText = isPhoto ? 'Pilih Foto' : 'Pilih Berkas PDF';
-                                
-                                uploadArea.innerHTML = `
-                                    <i class="fas ${icon}"></i>
-                                    <p class="text-gray-600 mb-2">${text}</p>
-                                    <p class="text-sm text-gray-500">${format}</p>
-                                    <input type="file" id="${inputId}" ${isPhoto ? 'accept="image/*"' : 'accept=".pdf"'} class="hidden">
-                                    <button type="button" onclick="document.getElementById('${inputId}').click()" class="mt-4 mobile-button">
-                                        ${buttonText}
-                                    </button>
-                                `;
+                    // Handle mobile file uploads
+                    const fotoInputMobile = document.getElementById('fotopetugasMobile');
+                    const berkasInputMobile = document.getElementById('unggahberkasMobile');
+                    
+                    if (fotoInputMobile.files[0]) {
+                        const fotoBase64 = await fileToBase64(fotoInputMobile.files[0]);
+                        formData.fotopetugas = {
+                            data: fotoBase64,
+                            name: fotoInputMobile.files[0].name
+                        };
+                    }
+                    
+                    if (berkasInputMobile.files[0]) {
+                        const berkasBase64 = await fileToBase64(berkasInputMobile.files[0]);
+                        formData.unggahberkas = {
+                            data: berkasBase64,
+                            name: berkasInputMobile.files[0].name
+                        };
+                    }
+                    
+                    // Send to Google Sheets
+                    const result = await sendToGoogleSheets(formData);
+                    
+                    if (result.status === 'success') {
+                        showSuccessModal();
+                        e.target.reset();
+                        
+                        // Reset mobile file uploads
+                        const mobileFileInputs = ['fotopetugasMobile', 'unggahberkasMobile'];
+                        mobileFileInputs.forEach(inputId => {
+                            const input = document.getElementById(inputId);
+                            if (input) {
+                                input.value = '';
+                                const uploadArea = input.closest('.mobile-file-upload');
+                                if (uploadArea) {
+                                    const isPhoto = inputId.includes('foto');
+                                    const icon = isPhoto ? 'fa-cloud-upload-alt' : 'fa-file-pdf';
+                                    const text = isPhoto ? 'Tap untuk upload foto' : 'Tap untuk upload berkas';
+                                    const format = isPhoto ? 'JPG, PNG (Max: 2MB)' : 'PDF (Max: 10MB)';
+                                    const buttonText = isPhoto ? 'Pilih Foto' : 'Pilih Berkas PDF';
+                                    
+                                    uploadArea.innerHTML = `
+                                        <i class="fas ${icon}"></i>
+                                        <p class="text-gray-600 mb-2">${text}</p>
+                                        <p class="text-sm text-gray-500">${format}</p>
+                                        <input type="file" id="${inputId}" ${isPhoto ? 'accept="image/*"' : 'accept=".pdf"'} class="hidden">
+                                        <button type="button" onclick="document.getElementById('${inputId}').click()" class="mt-4 mobile-button">
+                                            ${buttonText}
+                                        </button>
+                                    `;
+                                }
                             }
-                        }
-                    });
+                        });
+                        
+                        // Set current date again
+                        const today = new Date().toISOString().split('T')[0];
+                        document.getElementById('tanggalPengajuanMobile').value = today;
+                    } else {
+                        throw new Error(result.message || 'Gagal mengirim data');
+                    }
                     
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat mengirim data: ' + error.message);
+                } finally {
                     submitButton.innerHTML = originalText;
                     submitButton.disabled = false;
-                    
-                    // Set current date again
-                    const today = new Date().toISOString().split('T')[0];
-                    document.getElementById('tanggalPengajuanMobile').value = today;
-                }, 2000);
+                }
             });
             
             // Setup mobile contact form
@@ -1832,5 +1969,5 @@
             });
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98a2bac9a666411c',t:'MTc1OTcyODIzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98a2efb230b83fb6',t:'MTc1OTczMDQwNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
